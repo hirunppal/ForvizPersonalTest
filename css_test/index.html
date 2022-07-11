@@ -8,26 +8,37 @@
       body {
         background-color: #f3f5f6;
       }
-      .headNav {
+      .header {
         display: flex;
         justify-content: space-between;
       }
       img {
-        height: 150px;
+        /* height: 150px; */
+        display: block;
+        width: auto;
         margin: 4px;
+        object-fit: cover;
         /* width: auto; */
+        align-self: stretch;
         /* flex-basis: auto; */
       }
       container {
-        /* padding-inline: 4%; */
-        margin-left: auto;
+        background: #000;
+
+        display: flex;
+        /* margin-left: auto;
+        margin-right: auto; */
         width: auto;
-        /* justify-self: center; */
         padding-left: 2%;
         padding-right: 2%;
-        display: flex;
+
         flex-wrap: wrap;
-        justify-content: stretch;
+
+        justify-content: space-evenly;
+        align-items: stretch;
+        /* justify-content: stretch; */
+        /* justify-items: stretch;
+        align-items: baseline; */
 
         /* align-items: stretch; */
       }
@@ -37,7 +48,7 @@
     <!-- [{"id":"0","author":"Alejandro Escamilla","width":5616,"height":3744,"url":"https://unsplash.com/photos/yC-Yzbqy7PY","download_url":"https://picsum.photos/id/0/5616/3744"}, -->
   </head>
   <body>
-    <div class="headNav">
+    <div class="header">
       <p>Everyone photo</p>
       <p>View all 2,724,700</p>
     </div>
@@ -66,8 +77,14 @@
         // console.log(JSON.stringify(res.body));
         let boxesSource = '';
         for (let i of arrRes) {
-          // console.log(  i.url);
-          boxesSource += '<img src=' + i.download_url + '/>';
+          console.log(i);
+
+          boxesSource +=
+            '<img src=' +
+            i.download_url +
+            ' alt=' +
+            i.author +
+            ' height="150"   />';
         }
         document.getElementById('image').innerHTML = boxesSource;
       };

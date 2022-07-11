@@ -44,6 +44,7 @@ const awns = checkAvailability(
   '2017-09-28 16:00:01',
   '2019-09-30 16:00:02'
 );
+
 // console.log(awns);
 const getBookingsForWeek = (roomId, weekNo) => {
   return [];
