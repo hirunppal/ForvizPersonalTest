@@ -13,65 +13,50 @@
         justify-content: space-between;
       }
       img {
-        /* height: 150px; */
         display: block;
+        height: 150px;
         width: auto;
         margin: 4px;
+        flex-grow: 1;
         object-fit: cover;
-        /* width: auto; */
         align-self: stretch;
-        /* flex-basis: auto; */
       }
       container {
-        background: #000;
-
         display: flex;
-        /* margin-left: auto;
-        margin-right: auto; */
         width: auto;
         padding-left: 2%;
         padding-right: 2%;
 
         flex-wrap: wrap;
-
-        justify-content: space-evenly;
-        align-items: stretch;
-        /* justify-content: stretch; */
-        /* justify-items: stretch;
-        align-items: baseline; */
-
-        /* align-items: stretch; */
+        justify-items: stretch;
+      }
+      p > small {
+        color: darkblue;
       }
     </style>
-    <title>Document</title>
 
-    <!-- [{"id":"0","author":"Alejandro Escamilla","width":5616,"height":3744,"url":"https://unsplash.com/photos/yC-Yzbqy7PY","download_url":"https://picsum.photos/id/0/5616/3744"}, -->
+    <title>Document</title>
   </head>
   <body>
-    <div class="header">
-      <p>Everyone photo</p>
-      <p>View all 2,724,700</p>
+    <div class="content">
+      <div class="header">
+        <p>Everyone photo</p>
+        <p><small> View all 2,724,700 </small></p>
+      </div>
+      <container id="image">
+        <!-- <div></div> -->
+      </container>
     </div>
-    <container id="image">
-      <!-- <div></div> -->
-    </container>
     <script>
       const getAllimage = async () => {
         const res = await fetch('https://picsum.photos/v2/list', {
           // cache: 'default',
           // method: 'GET',
           // mode: 'no-cors',
-          // credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
-            // referrerPolicy: 'no-referrer',
-            // 'Access-Control-Allow-Origin': '*',
-            // 'Access-Control-Allow-Methods': 'GET',
-            // 'Access-Control-Allow-Headers': '*',
-            // 'Content-Type': 'application/x-www-form-urlencoded',
           },
         });
-        // const ObjArr = res.body;
         const arrRes = await res.json();
         // console.log(arrRes);
         // console.log(JSON.stringify(res.body));
@@ -80,11 +65,8 @@
           console.log(i);
 
           boxesSource +=
-            '<img src=' +
-            i.download_url +
-            ' alt=' +
-            i.author +
-            ' height="150"   />';
+            '<img src=' + i.download_url + ' alt=' + i.author + '  />';
+          // height="150" width: "auto"
         }
         document.getElementById('image').innerHTML = boxesSource;
       };
