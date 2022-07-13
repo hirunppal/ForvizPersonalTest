@@ -1,10 +1,10 @@
+const { faIgloo } = require('@fortawesome/free-solid-svg-icons');
 const demoBooking = require('./demo-booking-data.json');
 
 const checkAvailability = (roomId, startTime, endTime) => {
   const targetRooms = demoBooking.filter((el) => {
     if (el.roomId === roomId) return el;
   });
-  // console.log(targetRooms);
   const Checklog = [];
   targetRooms.forEach((ele) => {
     const roomTimestart = new Date(ele.startTime).getTime();
@@ -44,42 +44,122 @@ const awns = checkAvailability(
   '2019-09-30 16:00:02'
 );
 // console.log(awns);
-
+//
+//
+///
+///
+//
 const getBookingsForWeek = (roomId, weekNo) => {
-  const today = '' + new Date();
+  // const today = new Date();
+  const today = new Date('2019-09-30 09:00:00');
   const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const startDay = (obj) => '' + new Date(obj.startTime);
+  const startDay = (obj) => new Date(obj.startTime);
 
-  const options = {
+  const GetfirstdateOftheWeek = (fulldate) =>
+    new Date(fulldate.setDate(fulldate.getDate() - fulldate.getDay()));
+  // const GetfirstdateOfnextWeek = (fulldate) =>
+  // new Date(
+  //   fulldate.setDate(fulldate.getDate() - fulldate.getDay())
+  // ).getTime();
+  const mstoday = 1000 * 60 * 60 * 24;
+  const optionsWeekno = {
     1: (el) => {
-      const todaytext = '' + new Date('2019-10-01 10:00:00');
-      // console.log(today);
-      // console.log(today.slice(0, 16));
-      console.log(startDay(el).slice(0, 16));
-      if (today.slice(0, 16) === startDay(el).slice(0, 16)) {
+      if (('' + today).slice(0, 16) === (startDay(el) + '').slice(0, 16)) {
         return el;
       }
     },
+    //fuction for get this week Books
+
     2: (elthisweek) => {
-      console.log(startDay(elthisweek));
-      if (today.getDay() < startDay(elthisweek).getDay() && true) {
+      const firstdate = GetfirstdateOftheWeek(today).getTime() / mstoday;
+      const lastdate =
+        new Date(
+          GetfirstdateOftheWeek(today).setDate(
+            GetfirstdateOftheWeek(today).getDate() + 6
+          )
+        ) / mstoday;
+
+      console.log('Math.floor(firstdate)');
+      console.log(startDay(elthisweek).getTime() / mstoday);
+      console.log(Math.floor(firstdate));
+      // console.log(REALnextweekToday.getTime() / mstoday);
+      console.log(Math.ceil(lastdate));
+
+      if (
+        Math.floor(firstdate) <= startDay(elthisweek).getTime() / mstoday &&
+        startDay(elthisweek).getTime() / mstoday <= Math.ceil(lastdate)
+      ) {
+        return elthisweek;
       }
-      return elthisweek;
       // const
     },
-    // 3: next_week,
-  };
-  // const ArrofBookings = [];
-  // for (let i = weekNo; i > 0; i--) {
-  //   if (i > 3) console.log(i);
-  // }
+    3: (searchextWeek) => {
+      // console.log(searchextWeek);
+      // .getTime() / mstoday
+      const todayToNextWeek = new Date(today.getTime());
+      const REALnextweekToday = new Date(
+        todayToNextWeek.setDate(todayToNextWeek.getDate() + 7)
+      );
 
-  const roomBookings = demoBooking.filter((el) => el.roomId === roomId);
-  console.log(options[weekNo]);
-  return weekNo
-    ? roomBookings.filter(options[weekNo])
-    : Object.values(options).map((e) => roomBookings.filter(e));
+      const nextweekToday = startDay(searchextWeek);
+      const nextweekdate = new Date(nextweekToday.getTime());
+      const NextWeekstartDay = new Date(
+        nextweekdate.setDate(nextweekdate.getDate())
+      );
+      // .getDate();
+      const date = new Date(GetfirstdateOftheWeek(NextWeekstartDay).getTime());
+      const firstdatee =
+        new Date(
+          date.setDate(GetfirstdateOftheWeek(NextWeekstartDay).getDate())
+        ).getTime() / mstoday;
+
+      lastDateOfnextWeek =
+        new Date(
+          NextWeekstartDay.setDate(NextWeekstartDay.getDate() + 6)
+        ).getTime() / mstoday;
+
+      // console.log(searchextWeek);
+      // console.log(Math.floor(firstdatee));
+      // console.log(REALnextweekToday.getTime() / mstoday);
+      // console.log(Math.ceil(lastDateOfnextWeek));
+      if (
+        Math.floor(firstdatee) <= REALnextweekToday.getTime() / mstoday &&
+        REALnextweekToday.getTime() / mstoday <= Math.ceil(lastDateOfnextWeek)
+      ) {
+        return searchextWeek;
+      }
+    },
+  };
+
+  const thisRoomBookings = demoBooking.filter((el) => el.roomId === roomId);
+
+  // console.log(Object.values(optionsWeekno).map((e) => e));
+
+  if (weekNo) {
+    const getBookingsForWeek = thisRoomBookings.filter(optionsWeekno[weekNo]);
+    if (getBookingsForWeek?.length > 0) {
+      return getBookingsForWeek;
+    } else return 'none';
+  } else {
+    return Object.values(optionsWeekno).map((e, idx) => {
+      // console.log(thisRoomBookings.filter(e));
+      return {
+        For:
+          idx === 0
+            ? 'today'
+            : idx === 1
+            ? 'this week'
+            : idx === 2
+            ? 'next week'
+            : '',
+        BookingList: thisRoomBookings.filter(e),
+      };
+    });
+  }
 };
 
 //test
-console.log(getBookingsForWeek('A102', 1));
+
+console.log('BookingForTheRooom');
+console.log(JSON.stringify(getBookingsForWeek('A102')));
+//
